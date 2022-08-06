@@ -52,16 +52,16 @@ void appStart(void)
 	transData.terminalData = termData;
 	EN_transState_t transSt = recieveTransactionData(&transData);
 	if (transSt == DECLINED_STOLEN_CARD) {
-		printf("\n\t--===DECLINED INVALID ACCOUNT===--\n");
+		printf("\n\t--===DECLINED STOLEN CARD/INVALID ACCOUNT===--\n");
 	}
 	else if (transSt== DECLINED_INSUFFECIENT_FUND) {
 		printf("\n\t--===DECLINED_INSUFFECIENT_FUND===--\n");
 	}
 	else if (transSt == APPROVED) {
 		printf("\n\t-=APPROVED\n");
-		printf("UPDATING ACCOUNTS DB...\n");
+		printf("\t-=UPDATING ACCOUNTS DB...\n");
 		updateAccountDB();
-		printf("SAVING TRANSACTION...\n");
+		printf("\t-=SAVING TRANSACTION...\n");
 	}
 	
 }

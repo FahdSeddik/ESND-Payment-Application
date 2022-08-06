@@ -43,19 +43,20 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 		scanf("%s", d);
 		if (!d)return WRONG_DATE;
 		if (d[11] != '\0' || d[9] == '\0' || d[2] != '/' || d[5] != '/')return WRONG_DATE;
-		for (int i = 0; i < 11; i++) {
-			if (i == 2 || i == 5)if (d[i] != '/')return WRONG_DATE;
+		for (int i = 0; i < 10; i++) {
+			if (i == 2 || i == 5)continue;
 			if (d[i] - '0' < 0 || d[i] - '0' > 9)return WRONG_DATE;
 		}
 		int days = (d[0] - '0') * 10 + d[1]-'0';
 		if (days < 0 || days>31)return WRONG_DATE;
 		termData->transactionDate[0] = days / 10 + '0';
 		termData->transactionDate[1] = days % 10 + '0';
+		termData->transactionDate[2] = '/';
 		int months = (d[3] - '0') * 10 + d[4] - '0';
 		if (months < 1 || months>12)return WRONG_DATE;
 		termData->transactionDate[3] = months / 10 + '0';
 		termData->transactionDate[4] = months % 10 + '0';
-		
+		termData->transactionDate[5] = '/';
 		int year = (d[6] - '0') * 1000 + (d[7] - '0') * 100 + (d[8] - '0') * 10 + d[9] - '0';
 		if (year < 0)return WRONG_DATE;
 		termData->transactionDate[6] = d[6];

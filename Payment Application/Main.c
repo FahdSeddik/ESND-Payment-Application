@@ -7,7 +7,6 @@
 
 
 int main() {
-	
 	appStart();
-	printf("\t\n--===EXITING PROGRAM===--");
+	printf("\n\t--===EXITING PROGRAM===--\m");
 }

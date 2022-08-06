@@ -50,12 +50,12 @@ EN_transState_t recieveTransactionData(ST_transaction_t* transData)
 {
 	if (isValidAccount(&transData->cardHolderData)==ACCOUNT_NOT_FOUND) {
 		transData->transState = DECLINED_STOLEN_CARD;
-		if (saveTransaction(transData) == SAVING_FAILED)return INTERNAL_SERVER_ERROR;
+		//if (saveTransaction(transData) == SAVING_FAILED)return INTERNAL_SERVER_ERROR;
 		return DECLINED_STOLEN_CARD;
 	}
 	if (isAmountAvailable(&transData->terminalData)==LOW_BALANCE) {
 		transData->transState = DECLINED_INSUFFECIENT_FUND;
-		if(saveTransaction(transData) == SAVING_FAILED)return INTERNAL_SERVER_ERROR;
+		//if(saveTransaction(transData) == SAVING_FAILED)return INTERNAL_SERVER_ERROR;
 		return DECLINED_INSUFFECIENT_FUND;
 	}
 	transData->transState = APPROVED;
