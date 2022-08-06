@@ -14,6 +14,8 @@ typedef struct ST_accountsDB_t
 	uint8_t primaryAccountNumber[20];
 }ST_accountsDB_t;
 
+//ST_accountsDB_t AccountDB[255];
+
 typedef enum EN_serverError_t
 {
 	OK_serverError, SAVING_FAILED, TRANSACTION_NOT_FOUND, ACCOUNT_NOT_FOUND, LOW_BALANCE
@@ -32,6 +34,8 @@ typedef struct ST_transaction_t
 	uint32_t transactionSequenceNumber;
 }ST_transaction_t;
 
+
+void readAccountDB(void);
 EN_transState_t recieveTransactionData(ST_transaction_t*);
 EN_serverError_t isValidAccount(ST_cardData_t*);
 EN_serverError_t isAmountAvailable(ST_terminalData_t*);

@@ -154,7 +154,7 @@
     <ClCompile Include="Application\app.c" />
     <ClCompile Include="Card\card.c" />
     <ClCompile Include="Server\server.c" />
-    <ClCompile Include="Source.c" />
+    <ClCompile Include="Main.c" />
     <ClCompile Include="Terminal\terminal.c" />
   </ItemGroup>
   <ItemGroup>
