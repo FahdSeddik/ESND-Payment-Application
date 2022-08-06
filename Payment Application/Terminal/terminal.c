@@ -10,8 +10,9 @@
 //If the transaction date is NULL, less than 10 characters or wrong format will return WRONG_DATE error, else return OK.
 EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 {
-	char ans;
+	char ans='s';
 	printf("Do you want to enter transaction date \nor retrieve from system current date? [enter: e/system: s]: ");
+	fseek(stdin, 0, SEEK_END);
 	scanf("%c", &ans);
 	if (ans == 's' || ans == 'S') {
 		printf("Retreiving transaction date from system...\n");
@@ -35,8 +36,10 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 		return OK_terminalError;
 	}
 	else {
-		char d[12];
+		char d[100];
+		for (int i = 0; i < 100; i++)d[i] = '\0';
 		printf("Enter transaction date [DD/MM/YYYY]: ");
+		fseek(stdin, 0, SEEK_END);
 		scanf("%s", d);
 		if (!d)return WRONG_DATE;
 		if (d[11] != '\0' || d[9] == '\0' || d[2] != '/' || d[5] != '/')return WRONG_DATE;
@@ -68,10 +71,12 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 //If the card expiration date is before the transaction date will return EXPIRED_CARD, else return OK.
 EN_terminalError_t isCardExpired(ST_cardData_t cardData, ST_terminalData_t termData)
 {
-	for (int i = 0, j = 3; i < 6; i++, j++) {
-		//if any is smaller then expiration date passed
-		if (cardData.cardExpirationDate[i] < termData.transactionDate[j])return EXPIRED_CARD;
-	}
+	int cmonth = (cardData.cardExpirationDate[0] - '0') * 10 + cardData.cardExpirationDate[1]-'0';
+	int cyear = (cardData.cardExpirationDate[3] - '0') * 10 + cardData.cardExpirationDate[4] - '0'+2000;
+	int tmonth = (termData.transactionDate[3] - '0') * 10 + termData.transactionDate[4] - '0';
+	int tyear = (termData.transactionDate[6] - '0') * 1000 + (termData.transactionDate[7] - '0') * 100 + (termData.transactionDate[8] - '0') * 10+ +termData.transactionDate[9] - '0';
+	if (tyear > cyear)return EXPIRED_CARD;
+	if (tyear==cyear && tmonth > cmonth)return EXPIRED_CARD;
 	return OK_terminalError;
 }
 
@@ -142,6 +147,7 @@ EN_terminalError_t setMaxAmount(ST_terminalData_t* termData)
 	float mxamount;
 	scanf("%f", &mxamount);
 	if (mxamount <= 0)return INVALID_MAX_AMOUNT;
+	termData->maxTransAmount = mxamount;
 	return OK_terminalError;
 }
 

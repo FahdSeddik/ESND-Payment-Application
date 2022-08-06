@@ -46,9 +46,16 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 {
 	
 	char name[100];
-	for (int i = 0; i < 26; i++)name[i] = '\0';
+	for (int i = 0; i < 100; i++)name[i] = '\0';
 	printf("Enter card holder name [20-24 characters]: ");
-	scanf("%s", name);
+	fseek(stdin, 0, SEEK_END);
+	int i = 0;
+	char ch;
+	while ((ch = getchar()) != '\n') {
+		name[i] = ch;
+		i++;
+	}
+	fseek(stdin, 0, SEEK_END);
 	if (!name)return WRONG_NAME;
 	if (name[18] == '\0' || name[24] != '\0')return WRONG_NAME;
 	for(int i=0;i<25;i++){
@@ -63,9 +70,10 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 {
 	char cardexp[100];
-	for (int i = 0; i < 7; i++)cardexp[i] = '\0';
+	for (int i = 0; i < 100; i++)cardexp[i] = '\0';
 	uint32_t month, year;
 	printf("Enter expiry date [MM/YY]: ");
+	fseek(stdin, 0, SEEK_END);
 	scanf("%s", cardexp);
 	if (!cardexp)return WRONG_EXP_DATE;
 	if (cardexp[6] != '\0' || cardexp[3]=='\0')return WRONG_EXP_DATE;
@@ -83,18 +91,25 @@ EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 //If the PAN is NULL, less than 16 or more than 19 characters, will return WRONG_PAN error, else return OK.
 EN_cardError_t getCardPAN(ST_cardData_t* cardData)
 {
-	char ans;
-	printf("Do you want to generate Luhn number? [y/n]");
+	char ans='\0';
+	printf("Do you want to generate Luhn number? [y/n]\n");
+	fseek(stdin, 0, SEEK_END);
 	scanf("%c", &ans);
 	if (ans == 'y' || ans == 'Y') {
 		uint8_t *cardpan = GenerateLuhn();
 		printf("Generated card number: %s\n", cardpan);
-
 	}
 	else {
-		char cardpan[21];
+		char cardpan[100];
+		for (int i = 0; i < 100; i++)cardpan[i] = '\0';
 		printf("Enter PAN [16-19 characters]:");
-		scanf("%s", cardpan);
+		int i = 0;
+		char ch;
+		fseek(stdin, 0, SEEK_END);
+		while ((ch = getchar()) != '\n') {
+			cardpan[i] = ch;
+			i++;
+		}
 		if (!cardpan)return WRONG_PAN;
 		if (cardpan[19] != '\0' || cardpan[14] == '\0')return WRONG_PAN;
 		for (int i = 0; i < 20; i++) {

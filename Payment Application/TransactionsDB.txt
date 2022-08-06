@@ -1,0 +1,9 @@
+-=Transaction=-
+	Card Holder Name: Fahd Ahmed Farag Seddik
+	-PAN: 2997981160431838857
+	-Expiry Date: 06/24
+	-Amount: 1170.000000
+	-Max Amount: 2000.000000
+	-Transaction State: APPROVED
+	-Transaction Sequence Number: 1
+

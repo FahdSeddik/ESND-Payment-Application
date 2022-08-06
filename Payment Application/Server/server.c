@@ -94,7 +94,7 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData)
 
 EN_serverError_t isAmountAvailable(ST_terminalData_t* termData)
 {
-	if (AccountDB[index].balance > termData->transAmount)return LOW_BALANCE;
+	if (AccountDB[index].balance < termData->transAmount)return LOW_BALANCE;
 	return OK_serverError;
 }
 
