@@ -8,5 +8,5 @@
 
 int main() {
 	appStart();
-	printf("\n\t--===EXITING PROGRAM===--\m");
+	printf("\n\t--===EXITING PROGRAM===--\n");
 }

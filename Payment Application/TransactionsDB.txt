@@ -7,3 +7,39 @@
 	-Transaction State: APPROVED
 	-Transaction Sequence Number: 1
 
+-=Transaction=-
+	Card Holder Name: Test function savetrans
+	-PAN: 5744066719441261278
+	-Expiry Date: 05/23
+	-Amount: 500.000000
+	-Max Amount: 1000.000000
+	-Transaction State: APPROVED
+	-Transaction Sequence Number: 2
+
+-=Transaction=-
+	Card Holder Name: test function receive
+	-PAN: 7095380883898378445
+	-Expiry Date: 05/23
+	-Amount: 500.000000
+	-Max Amount: 1000.000000
+	-Transaction State: APPROVED
+	-Transaction Sequence Number: 3
+
+-=Transaction=-
+	Card Holder Name: testdfyucbntion receive
+	-PAN: 7698253124512904834
+	-Expiry Date: 05/23
+	-Amount: 1500.000000
+	-Max Amount: 300000.000000
+	-Transaction State: APPROVED
+	-Transaction Sequence Number: 4
+
+-=Transaction=-
+	Card Holder Name: Transaction approved
+	-PAN: 4143436656148421279
+	-Expiry Date: 05/23
+	-Amount: 500.000000
+	-Max Amount: 1000.000000
+	-Transaction State: APPROVED
+	-Transaction Sequence Number: 5
+

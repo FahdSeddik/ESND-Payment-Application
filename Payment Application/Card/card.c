@@ -44,7 +44,6 @@ uint8_t* GenerateLuhn() {
 // WRONG_NAME error, else return OK
 EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 {
-	
 	char name[100];
 	for (int i = 0; i < 100; i++)name[i] = '\0';
 	printf("Enter card holder name [20-24 characters]: ");
@@ -97,7 +96,10 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData)
 	scanf("%c", &ans);
 	if (ans == 'y' || ans == 'Y') {
 		uint8_t *cardpan = GenerateLuhn();
-		printf("Generated card number: %s\n", cardpan);
+		for (int i = 0; i < 20; i++) {
+			cardData->primaryAccountNumber[i] = cardpan[i];
+		}
+		printf("Generated card number: %s\n", cardData->primaryAccountNumber);
 	}
 	else {
 		char cardpan[100];
