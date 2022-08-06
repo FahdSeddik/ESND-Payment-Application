@@ -138,7 +138,7 @@ EN_terminalError_t isBelowMaxAmount(ST_terminalData_t* termData)
 //If transaction max amount less than or equal to 0 will return INVALID_MAX_AMOUNT error, else return OK.
 EN_terminalError_t setMaxAmount(ST_terminalData_t* termData)
 {
-	printf("Enter maxAmount: ");
+	printf("Enter maxAmount for a transaction: ");
 	float mxamount;
 	scanf("%f", &mxamount);
 	if (mxamount <= 0)return INVALID_MAX_AMOUNT;

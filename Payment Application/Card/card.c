@@ -45,7 +45,8 @@ uint8_t* GenerateLuhn() {
 EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 {
 	
-	char name[26];
+	char name[100];
+	for (int i = 0; i < 26; i++)name[i] = '\0';
 	printf("Enter card holder name [20-24 characters]: ");
 	scanf("%s", name);
 	if (!name)return WRONG_NAME;
@@ -61,7 +62,8 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 //If the card expiry date is NULL, less or more than 5 characters, or has the wrong format will return WRONG_EXP_DATE error, else return OK.
 EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 {
-	char cardexp[7];
+	char cardexp[100];
+	for (int i = 0; i < 7; i++)cardexp[i] = '\0';
 	uint32_t month, year;
 	printf("Enter expiry date [MM/YY]: ");
 	scanf("%s", cardexp);

@@ -36,6 +36,7 @@ typedef struct ST_transaction_t
 
 
 void readAccountDB(void);
+void updateAccountDB(void);
 EN_transState_t recieveTransactionData(ST_transaction_t*);
 EN_serverError_t isValidAccount(ST_cardData_t*);
 EN_serverError_t isAmountAvailable(ST_terminalData_t*);

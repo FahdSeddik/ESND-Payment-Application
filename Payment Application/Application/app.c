@@ -13,6 +13,57 @@ void appStart(void)
 	printf("-=Reading AccountsDB...\n");
 	readAccountDB();
 	printf("-=Succesfully loaded AccountsDB=-\n\n");
+	ST_cardData_t cardData;
+	ST_terminalData_t termData;
+	ST_transaction_t transData;
+	while (getCardHolderName(&cardData) == WRONG_NAME) {
+		printf("\n\t--===WRONG_NAME===--\n");
+		printf("Re-enter:\n");
+	}
+	while (getCardExpiryDate(&cardData) == WRONG_EXP_DATE) {
+		printf("\n\t--===WRONG_EXP_DATE===--\n");
+		printf("Re-enter:\n");
+	}
+	while (getCardPAN(&cardData) == WRONG_PAN) {
+		printf("\n\t--===WRONG_PAN===--\n");
+		printf("Re-enter:\n");
+	}
+	while (setMaxAmount(&termData) == INVALID_AMOUNT) {
+		printf("\n\t--===INVALID AMOUNT===--\n");
+		printf("Re-enter:\n");
+	}
+	while (getTransactionDate(&termData) == WRONG_DATE) {
+		printf("\n\t--===WRONG_DATE===--\n");
+		printf("Re-enter:\n");
+	}
+	if (isCardExpired(cardData, termData) == EXPIRED_CARD) {
+		printf("\n\n\t--===EXPIRED_CARD===--\n");
+		return;
+	}
+	while (getTransactionAmount(&termData) == INVALID_AMOUNT) {
+		printf("\n\t--===INVALID_AMOUNT===--\n");
+		printf("Re-enter:\n");
+	}
+	if (isBelowMaxAmount(&termData) == EXCEED_MAX_AMOUNT){
+		printf("\n\t--===DECLINED EXCEED_MAX_AMOUNT===--\n");
+		return;
+	}
+	transData.cardHolderData = cardData;
+	transData.terminalData = termData;
+	EN_transState_t transSt = recieveTransactionData(&transData);
+	if (transSt == DECLINED_STOLEN_CARD) {
+		printf("\n\t--===DECLINED INVALID ACCOUNT===--\n");
+	}
+	else if (transSt== DECLINED_INSUFFECIENT_FUND) {
+		printf("\n\t--===DECLINED_INSUFFECIENT_FUND===--\n");
+	}
+	else if (transSt == APPROVED) {
+		printf("\n\t-=APPROVED\n");
+		printf("UPDATING ACCOUNTS DB...\n");
+		updateAccountDB();
+		printf("SAVING TRANSACTION...\n");
+	}
+	
 }
 
 //Was used to generate random balance and PAN in AccountsDB.txt
