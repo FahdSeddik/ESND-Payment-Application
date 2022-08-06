@@ -1,14 +1,40 @@
+#ifndef _CARD_C_
+#define _CARD_C_
 #include "card.h"
-
 #include <random>
 #include <time.h>
+#include <stdio.h>
+int getNeededLuhnDigit(uint8_t* cardPan) {
+	int startindex=17;
+	int sum = 0;
+	char cp[21];
+	for (int i = 0; i <= startindex; i++) {
+		cp[i] = cardPan[i];
+	}
+	cp[startindex + 1] = '\0';
+	for (int i = startindex; i >= 0; i -= 2) {
+		int digit = (cp[i] - '0') * 2;
+		if (digit < 10)cp[i] = (char)(digit + '0');
+		else cp[i] = (char)(digit - 9 + '0');
+	}
+	for (int i = 0; i <= startindex; i++) {
+		sum += cp[i] - '0';
+	}
+	return sum % 10;
+}
 
-char* GenerateLuhn() {
+uint8_t* GenerateLuhn() {
 	time_t t1;
 	srand((unsigned)time(&t1));
-	uint32_t pan = rand() % (uint32_t)1e19 + 1e16;
-	char* cardpan[21];
-	itoa(pan, cardpan, 10);
+	uint8_t* cardpan= new uint8_t[21];
+	cardpan[0] = (char)('0' + rand() % 9 + 1);
+	for (int i = 1; i <= 17; i++) {
+		cardpan[i] = (char)('0' + rand() % 10);
+	}
+	cardpan[18] = '\0';
+	int valid = getNeededLuhnDigit(cardpan);
+	cardpan[18] = (char)('0' + valid);
+	cardpan[19] = '\0';
 	return cardpan;
 }
 
@@ -28,7 +54,7 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 		cardData->cardHolderName[i] = name[i];
 	}
 	printf("Read name: %s\n", cardData->cardHolderName);
-	return (EN_cardError_t)OK;
+	return (EN_cardError_t)OK_cardError;
 }
 //will ask for the card expiry dateand store it in card data.
 //Card expiry date is 5 characters string in the format "MM/YY", e.g "05/25".
@@ -36,7 +62,7 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 {
 	char cardexp[7];
-	uint8_t month, year;
+	uint32_t month, year;
 	printf("Enter expiry date [MM/YY]: ");
 	scanf("%s", cardexp);
 	if (!cardexp)return WRONG_EXP_DATE;
@@ -48,7 +74,7 @@ EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 		cardData->cardExpirationDate[i] = cardexp[i];
 	}
 	printf("Read expiry date: %s\n", cardData->cardExpirationDate);
-	return (EN_cardError_t)OK;
+	return (EN_cardError_t)OK_cardError;
 }
 //This function will ask for the card's Primary Account Number and store it in card data.
 //PAN is 20 characters alphanumeric only string 19 character max, and 16 character min.
@@ -59,7 +85,7 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData)
 	printf("Do you want to generate Luhn number? [y/n]");
 	scanf("%c", &ans);
 	if (ans == 'y' || ans == 'Y') {
-		char *cardpan = GenerateLuhn();
+		uint8_t *cardpan = GenerateLuhn();
 		printf("Generated card number: %s\n", cardpan);
 
 	}
@@ -74,5 +100,6 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData)
 		}
 		printf("Read PAN: %s\n", cardData->primaryAccountNumber);
 	}
-	return OK;
+	return OK_cardError;
 }
+#endif

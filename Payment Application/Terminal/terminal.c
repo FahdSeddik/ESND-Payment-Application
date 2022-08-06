@@ -1,4 +1,8 @@
+#ifndef _TERMINAL_C_
+#define _TERMINAL_C_
+
 #include "terminal.h"
+#include<stdio.h>
 #include <time.h>
 
 //will ask for the transaction data and store it in terminal data.
@@ -8,7 +12,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 {
 	char ans;
 	printf("Do you want to enter transaction date \nor retrieve from system current date? [enter: e/system: s]: ");
-	scanf("%c", ans);
+	scanf("%c", &ans);
 	if (ans == 's' || ans == 'S') {
 		printf("Retreiving transaction date from system...\n");
 		time_t t = time(NULL);
@@ -28,7 +32,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 		termData->transactionDate[9] = '0' + year % 10;
 		termData->transactionDate[10] = '\0';
 		printf("Retrieved system date : %s\n", termData->transactionDate);
-		return OK;
+		return OK_terminalError;
 	}
 	else {
 		char d[12];
@@ -57,7 +61,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t* termData)
 		termData->transactionDate[9] = d[9];
 		termData->transactionDate[10] = '\0';
 		printf("Date read: %s\n", termData->transactionDate);
-		return OK;
+		return OK_terminalError;
 	}
 }
 //This function compares the card expiry date with the transaction date.
@@ -68,7 +72,7 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData, ST_terminalData_t termD
 		//if any is smaller then expiration date passed
 		if (cardData.cardExpirationDate[i] < termData.transactionDate[j])return EXPIRED_CARD;
 	}
-	return OK;
+	return OK_terminalError;
 }
 
 
@@ -77,7 +81,7 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData, ST_terminalData_t termD
 EN_terminalError_t isValidCardPAN(ST_cardData_t* cardData)
 {
 	char cardPan[20];
-	uint8_t size = 20;
+	int size = 20;
 	//copy cardpan into cardPan
 	for (int i = 0; i < size; i++) {
 		cardPan[i] = cardData->primaryAccountNumber[i];
@@ -98,33 +102,47 @@ EN_terminalError_t isValidCardPAN(ST_cardData_t* cardData)
 		if (dig < 10)cardPan[i] = '0' + dig;
 		else cardPan[i] = '0' + dig - 9;
 	}
-	uint8_t sum = 0;
+	int sum = 0;
 	//calculate digit sum
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i <=startindex; i++) {
 		if (cardPan[i] == '\0')continue;
 		sum += cardPan[i] - '0';
 	}
 	//check if valid
-	if (sum % 10 == checkdigit)return OK;
+	if (sum % 10 == checkdigit)return OK_terminalError;
 	else return INVALID_CARD;
 }
 
 
-//This function asks for the transaction amountand saves it into terminal data.
+//This function asks for the transaction amount and saves it into terminal data.
 //If the transaction amount is less than or equal to 0 will return INVALID_AMOUNT, else return OK.
 EN_terminalError_t getTransactionAmount(ST_terminalData_t* termData)
 {
-
-	return EN_terminalError_t();
+	float amount=-1;
+	printf("Enter transaction amount: ");
+	scanf("%f", &amount);
+	if (amount <= 0)return INVALID_AMOUNT;
+	termData->transAmount = amount;
+	return OK_terminalError;
 }
-
+//This function compares the transaction amount with the terminal max amount.
+//If the transaction amount is larger than the terminal max amount will return EXCEED_MAX_AMOUNT, else return OK.
 EN_terminalError_t isBelowMaxAmount(ST_terminalData_t* termData)
 {
-	return EN_terminalError_t();
+	if (termData->transAmount > termData->maxTransAmount)return EXCEED_MAX_AMOUNT;
+	return OK_terminalError;
 }
 
+//This function sets the maximum allowed amount into terminal data.
+//Transaction max amount is a float number.
+//If transaction max amount less than or equal to 0 will return INVALID_MAX_AMOUNT error, else return OK.
 EN_terminalError_t setMaxAmount(ST_terminalData_t* termData)
 {
-	return EN_terminalError_t();
+	printf("Enter maxAmount: ");
+	float mxamount;
+	scanf("%f", &mxamount);
+	if (mxamount <= 0)return INVALID_MAX_AMOUNT;
+	return OK_terminalError;
 }
 
+#endif

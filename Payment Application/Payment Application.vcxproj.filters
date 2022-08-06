@@ -18,6 +18,9 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{80306b99-e7cf-4bb4-a460-0bbe8993bb1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source File">
+      <UniqueIdentifier>{ea9d8d06-2af8-4abf-9b58-df6ffcffbb51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\app.c">
@@ -31,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="Server\server.c">
       <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.c">
+      <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
