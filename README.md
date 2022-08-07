@@ -11,8 +11,8 @@ These are some of the functions I thought I should highlight:
 - `getTransactionDate()` : asks for a date in the form `DD/MM/YYYY` or can retrieve `System Date` automatically
 - `getCardPAN()` : this functions asks either to generate a Luhn valid card PAN or enter manually
   * Uses `GenerateLuhn()` which essentially applies the Luhn algorithm to generate the card PAN
-- `readAccountDB()` : this load the accounts database from the database file (*read [database](https://github.com/FahdSeddik/ESND-Payment-Application/new/main?readme=1#databases) section*)
-- `saveTransaction()` : saves APPROVED transactions with all details into the transactions database (*read [database](https://github.com/FahdSeddik/ESND-Payment-Application/new/main?readme=1#databases) section*)
+- `readAccountDB()` : this load the accounts database from the database file (*read [database](https://github.com/FahdSeddik/ESND-Payment-Application#databases) section*)
+- `saveTransaction()` : saves APPROVED transactions with all details into the transactions database (*read [database](https://github.com/FahdSeddik/ESND-Payment-Application#databases) section*)
 
 ## Instructions
 - You would find demonstrated test cases in the "Submission Files/User Stories" Folder.
