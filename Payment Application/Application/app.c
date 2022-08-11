@@ -16,35 +16,50 @@ void appStart(void)
 	ST_cardData_t cardData;
 	ST_terminalData_t termData;
 	ST_transaction_t transData;
-	while (getCardHolderName(&cardData) == WRONG_NAME) {
+	EN_terminalError_t ret_term;
+	EN_cardError_t ret_card = getCardHolderName(&cardData);
+	while (ret_card == WRONG_NAME) {
 		printf("\n\t--===WRONG_NAME===--\n");
 		printf("Re-enter:\n");
+		ret_card = getCardHolderName(&cardData);
 	}
-	while (getCardExpiryDate(&cardData) == WRONG_EXP_DATE) {
+	ret_card = getCardExpiryDate(&cardData);
+	while (ret_card == WRONG_EXP_DATE) {
 		printf("\n\t--===WRONG_EXP_DATE===--\n");
 		printf("Re-enter:\n");
+		ret_card = getCardExpiryDate(&cardData);
 	}
-	while (getCardPAN(&cardData) == WRONG_PAN) {
+	ret_card = getCardPAN(&cardData);
+	while (ret_card == WRONG_PAN) {
 		printf("\n\t--===WRONG_PAN===--\n");
 		printf("Re-enter:\n");
+		ret_card = getCardPAN(&cardData);
 	}
-	while (setMaxAmount(&termData) == INVALID_AMOUNT) {
+	ret_term = setMaxAmount(&termData);
+	while (ret_term == INVALID_AMOUNT) {
 		printf("\n\t--===INVALID AMOUNT===--\n");
 		printf("Re-enter:\n");
+		ret_term = setMaxAmount(&termData);
 	}
-	while (getTransactionDate(&termData) == WRONG_DATE) {
+	ret_term = getTransactionDate(&termData);
+	while (ret_term == WRONG_DATE) {
 		printf("\n\t--===WRONG_DATE===--\n");
 		printf("Re-enter:\n");
+		ret_term = getTransactionDate(&termData);
 	}
-	if (isCardExpired(cardData, termData) == EXPIRED_CARD) {
+	ret_term = isCardExpired(cardData, termData);
+	if (ret_term == EXPIRED_CARD) {
 		printf("\n\n\t--===EXPIRED_CARD===--\n");
 		return;
 	}
-	while (getTransactionAmount(&termData) == INVALID_AMOUNT) {
+	ret_term = getTransactionAmount(&termData);
+	while (ret_term == INVALID_AMOUNT) {
 		printf("\n\t--===INVALID_AMOUNT===--\n");
 		printf("Re-enter:\n");
+		ret_term = getTransactionAmount(&termData);
 	}
-	if (isBelowMaxAmount(&termData) == EXCEED_MAX_AMOUNT){
+	ret_term = isBelowMaxAmount(&termData);
+	if (ret_term == EXCEED_MAX_AMOUNT){
 		printf("\n\t--===DECLINED EXCEED_MAX_AMOUNT===--\n");
 		return;
 	}
@@ -71,11 +86,13 @@ void appStart(void)
 //-comment out srand line in GenerateLuhn() first
 void fill() {
 	FILE* ptr;
+	int i;
+	float amount;
 	ptr = fopen("AccountsDB.txt", "w");
 	time_t t1;
 	srand((unsigned)time(&t1));
-	for (int i = 0; i < 255; i++) {
-		float amount = (float)(rand() % (int)1e6) / (float)(1e3 / 100);
+	for (i = 0; i < 255; i++) {
+		amount = (float)(rand() % (int)1e6) / (float)(1e3 / 100);
 		fprintf(ptr, "%.0f %s\n", amount, GenerateLuhn());
 	}
 }

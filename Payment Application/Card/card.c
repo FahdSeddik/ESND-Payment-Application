@@ -6,18 +6,23 @@
 #include <stdio.h>
 int getNeededLuhnDigit(uint8_t* cardPan) {
 	int startindex=17;
+	int i;
 	int sum = 0;
 	char cp[21];
-	for (int i = 0; i <= startindex; i++) {
+	for (i = 0; i <= startindex; i++) {
 		cp[i] = cardPan[i];
 	}
 	cp[startindex + 1] = '\0';
-	for (int i = startindex; i >= 0; i -= 2) {
+	for (i = startindex; i >= 0; i -= 2) {
 		int digit = (cp[i] - '0') * 2;
-		if (digit < 10)cp[i] = (char)(digit + '0');
-		else cp[i] = (char)(digit - 9 + '0');
+		if (digit < 10) {
+			cp[i] = (char)(digit + '0');
+		}
+		else { 
+			cp[i] = (char)(digit - 9 + '0');
+		}
 	}
-	for (int i = 0; i <= startindex; i++) {
+	for (i = 0; i <= startindex; i++) {
 		sum += cp[i] - '0';
 	}
 	return sum % 10;
@@ -25,10 +30,11 @@ int getNeededLuhnDigit(uint8_t* cardPan) {
 
 uint8_t* GenerateLuhn() {
 	time_t t1;
+	int i;
 	srand((unsigned)time(&t1));
 	uint8_t* cardpan= new uint8_t[21];
 	cardpan[0] = (char)('0' + rand() % 9 + 1);
-	for (int i = 1; i <= 17; i++) {
+	for (i = 1; i <= 17; i++) {
 		cardpan[i] = (char)('0' + rand() % 10);
 	}
 	cardpan[18] = '\0';
