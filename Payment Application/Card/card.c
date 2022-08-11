@@ -51,7 +51,10 @@ uint8_t* GenerateLuhn() {
 EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 {
 	char name[100];
-	for (int i = 0; i < 100; i++)name[i] = '\0';
+	int i;
+	for (i = 0; i < 100; i++) {
+		name[i] = '\0';
+	}
 	printf("Enter card holder name [20-24 characters]: ");
 	fseek(stdin, 0, SEEK_END);
 	int i = 0;
@@ -61,9 +64,13 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 		i++;
 	}
 	fseek(stdin, 0, SEEK_END);
-	if (!name)return WRONG_NAME;
-	if (name[18] == '\0' || name[24] != '\0')return WRONG_NAME;
-	for(int i=0;i<25;i++){
+	if (!name) {
+		return WRONG_NAME;
+	}
+	if (name[18] == '\0' || name[24] != '\0') {
+		return WRONG_NAME;
+	}
+	for(i=0;i<25;i++){
 		cardData->cardHolderName[i] = name[i];
 	}
 	printf("Read name: %s\n", cardData->cardHolderName);
@@ -75,17 +82,24 @@ EN_cardError_t getCardHolderName(ST_cardData_t* cardData)
 EN_cardError_t getCardExpiryDate(ST_cardData_t* cardData)
 {
 	char cardexp[100];
-	for (int i = 0; i < 100; i++)cardexp[i] = '\0';
+	int i;
+	for (i = 0; i < 100; i++)cardexp[i] = '\0';
 	uint32_t month, year;
 	printf("Enter expiry date [MM/YY]: ");
 	fseek(stdin, 0, SEEK_END);
 	scanf("%s", cardexp);
-	if (!cardexp)return WRONG_EXP_DATE;
-	if (cardexp[6] != '\0' || cardexp[3]=='\0')return WRONG_EXP_DATE;
+	if (!cardexp) {
+		return WRONG_EXP_DATE;
+	}
+	if (cardexp[6] != '\0' || cardexp[3] == '\0') { 
+		return WRONG_EXP_DATE; 
+	}
 	month = (cardexp[0] - '0') * 10 + (cardexp[1] - '0');
 	year = (cardexp[3] - '0') * 10 + (cardexp[4] - '0');
-	if (month < 1 || month>12 || cardexp[2]!='/' || (year > 99 || year < 0))return WRONG_EXP_DATE;
-	for (int i = 0; i < 6; i++) {
+	if (month < 1 || month>12 || cardexp[2] != '/' || (year > 99 || year < 0)) {
+		return WRONG_EXP_DATE;
+	}
+	for (i = 0; i < 6; i++) {
 		cardData->cardExpirationDate[i] = cardexp[i];
 	}
 	printf("Read expiry date: %s\n", cardData->cardExpirationDate);
@@ -109,7 +123,8 @@ EN_cardError_t getCardPAN(ST_cardData_t* cardData)
 	}
 	else {
 		char cardpan[100];
-		for (int i = 0; i < 100; i++)cardpan[i] = '\0';
+		int i;
+		for (i = 0; i < 100; i++)cardpan[i] = '\0';
 		printf("Enter PAN [16-19 characters]:");
 		int i = 0;
 		char ch;

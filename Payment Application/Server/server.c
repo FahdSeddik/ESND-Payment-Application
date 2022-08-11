@@ -16,11 +16,13 @@ void readAccountDB(void) {
 	}
 	uint8_t pan[20];
 	float amount;
-	int i = 0;
+	int i = 0,j;
 	while (fscanf(ptr, "%f %s", &amount, pan)) {
-		if (i > 0 && AccountDB[i - 1].balance == amount && AccountDB[i - 1].primaryAccountNumber[6] == pan[6])break;
+		if (i > 0 && AccountDB[i - 1].balance == amount && AccountDB[i - 1].primaryAccountNumber[6] == pan[6]) {
+			break;
+		}
 		AccountDB[i].balance = amount;
-		for (int j = 0; j < 20; j++) {
+		for (j = 0; j < 20; j++) {
 			AccountDB[i].primaryAccountNumber[j] = pan[j];
 		}
 		i++;
@@ -31,13 +33,16 @@ void readAccountDB(void) {
 void updateAccountDB(void)
 {
 	FILE* ptr;
+	int i;
 	ptr = fopen("./AccountsDB.txt", "w");
 	if (!ptr){
 		printf("'AccountsDB.txt' File Corrupted/Not Found.\n");
 		return;
 	}
-	for (int i = 0; i < 255; i++) {
-		if (AccountDB[i].primaryAccountNumber[0] == '\0')break;
+	for (i = 0; i < 255; i++) {
+		if (AccountDB[i].primaryAccountNumber[0] == '\0') {
+			break;
+		}
 		fprintf(ptr, "%f %s\n", AccountDB[i].balance, AccountDB[i].primaryAccountNumber);
 	}
 }
@@ -60,7 +65,9 @@ EN_transState_t recieveTransactionData(ST_transaction_t* transData)
 	}
 	transData->transState = APPROVED;
 	AccountDB[index].balance -= transData->terminalData.transAmount;
-	if(saveTransaction(transData)==SAVING_FAILED)return INTERNAL_SERVER_ERROR;
+	if (saveTransaction(transData) == SAVING_FAILED) {
+		return INTERNAL_SERVER_ERROR;
+	}
 	return APPROVED;
 }
 
@@ -69,12 +76,12 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData)
 	uint8_t* PAN =cardData->primaryAccountNumber;
 	//linear search through AccountsDB
 	bool found = false;
-	
-	for (int i = 0; i < 255; i++) {
+	int i, j;
+	for (i = 0; i < 255; i++) {
 		//if not empty(no more records)
 		if (AccountDB[i].primaryAccountNumber[0] != '\0') {
 			bool equal = true;
-			for (int j = 0; j < 20; j++) {
+			for (j = 0; j < 20; j++) {
 				if (AccountDB[i].primaryAccountNumber[j] != PAN[j]) {
 					equal = false;
 					break;
@@ -86,15 +93,21 @@ EN_serverError_t isValidAccount(ST_cardData_t* cardData)
 				break;
 			}
 		}
-		else break;
+		else {
+			break;
+		}
 	}
-	if (!found)return ACCOUNT_NOT_FOUND;
+	if (!found) {
+		return ACCOUNT_NOT_FOUND;
+	}
 	return OK_serverError;
 }
 
 EN_serverError_t isAmountAvailable(ST_terminalData_t* termData)
 {
-	if (AccountDB[index].balance < termData->transAmount)return LOW_BALANCE;
+	if (AccountDB[index].balance < termData->transAmount) {
+		return LOW_BALANCE;
+	}
 	return OK_serverError;
 }
 
@@ -102,7 +115,9 @@ EN_serverError_t saveTransaction(ST_transaction_t* transData)
 {
 	FILE* ptr;
 	ptr = fopen("./INFO.txt", "r");
-	if (!ptr)return SAVING_FAILED;
+	if (!ptr) {
+		return SAVING_FAILED;
+	}
 	int transnum;
 	fscanf(ptr, "%d", &transnum);
 	fclose(ptr);
@@ -111,7 +126,9 @@ EN_serverError_t saveTransaction(ST_transaction_t* transData)
 	fclose(ptr);
 	transData->transactionSequenceNumber = transnum+1;
 	ptr = fopen("./TransactionsDB.txt", "a");
-	if (!ptr) return SAVING_FAILED;
+	if (!ptr) {
+		return SAVING_FAILED;
+	}
 	//-=Transaction=-
 	//	-Card Holder Name:
 	//	-PAN:
@@ -127,9 +144,15 @@ EN_serverError_t saveTransaction(ST_transaction_t* transData)
 	fprintf(ptr, "\t-Amount: %f\n", transData->terminalData.transAmount);
 	fprintf(ptr, "\t-Max Amount: %f\n", transData->terminalData.maxTransAmount);
 	fprintf(ptr, "\t-Transaction State: ");
-	if (transData->transState == APPROVED)fprintf(ptr, "APPROVED\n");
-	else if (transData->transState == DECLINED_INSUFFECIENT_FUND)fprintf(ptr, "DECLINED_INSUFFECIENT_FUND\n");
-	else if (transData->transState == DECLINED_STOLEN_CARD)fprintf(ptr, "DECLINED_STOLEN_CARD\n");
+	if (transData->transState == APPROVED) {
+		fprintf(ptr, "APPROVED\n");
+	}
+	else if (transData->transState == DECLINED_INSUFFECIENT_FUND) {
+		fprintf(ptr, "DECLINED_INSUFFECIENT_FUND\n");
+	}
+	else if (transData->transState == DECLINED_STOLEN_CARD) {
+		fprintf(ptr, "DECLINED_STOLEN_CARD\n");
+	}
 	fprintf(ptr, "\t-Transaction Sequence Number: %d\n\n", transData->transactionSequenceNumber);
 	fclose(ptr);
 	return OK_serverError;
